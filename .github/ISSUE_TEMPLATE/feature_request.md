@@ -13,11 +13,9 @@ _Example: Add a project dashboard that displays active projects, task counts, an
 
 ---
 
-## Goal / User Story
-**As a** [user type],  
-**I want** [the feature or functionality],  
-**so that** [the benefit or purpose].  
-_Example: As a project manager, I want to see all ongoing projects in one dashboard so I can track progress easily._
+## Goal
+_Example Goal:
+Establish a secure and efficient connection between the application and a database to enable data persistence for future development.
 
 ---
 
