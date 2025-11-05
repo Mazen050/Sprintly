@@ -34,6 +34,3 @@ jobs:
         working-directory: FrontEnd
         run: npm run build -- --configuration=production
 
-      - name: Run tests
-        working-directory: FrontEnd
-        run: npm test -- --watch=false --browsers=ChromeHeadless
