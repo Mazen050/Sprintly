@@ -32,6 +32,7 @@ jobs:
       run: mvn -B package --file pom.xml
     
     - name: Run Tests
+      working-directory: backend
       run: mvn test
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
