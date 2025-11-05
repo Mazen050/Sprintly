@@ -6,11 +6,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
-  id-token: write
-  security-events: write
-
 
 jobs:
   build:
@@ -28,6 +23,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+          cache-dependency-path: FrontEnd/package-lock.json
+
 
       - name: Install dependencies
         working-directory: FrontEnd
