@@ -1,5 +1,10 @@
 package com.sprintly.backend.entities;
 
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,16 +13,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
-import java.time.OffsetDateTime;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 
 @Entity
+@Table(name = "\"Orders\"")
 @Getter
 @Setter
-public class CartItem {
+public class Orders {
 
     @Id
     @Column(nullable = false, updatable = false)
@@ -33,18 +40,27 @@ public class CartItem {
     )
     private Long id;
 
-    @Column(nullable = false)
-    private Integer quantity;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalPrice;
+
+    @Column
+    private String status;
 
     @Column
     private OffsetDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    @Column
+    private OffsetDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "discount_code_id")
+    private DiscountCodes discountCode;
+
+    @OneToMany(mappedBy = "order")
+    private Set<OrderItems> orderOrderItems = new HashSet<>();
 
 }

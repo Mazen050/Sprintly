@@ -1,9 +1,5 @@
 package com.sprintly.backend.entities;
 
-import java.time.OffsetDateTime;
-import java.util.HashSet;
-import java.util.Set;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +16,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Cart {
+public class Addresses {
 
     @Id
     @Column(nullable = false, updatable = false)
@@ -37,14 +32,20 @@ public class Cart {
     )
     private Long id;
 
-    @Column
-    private OffsetDateTime createdAt;
+    @Column(columnDefinition = "text")
+    private String street;
+
+    @Column(columnDefinition = "text")
+    private String city;
+
+    @Column(columnDefinition = "text")
+    private String country;
+
+    @Column(length = 20)
+    private String postalCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users user;
-
-    @OneToMany(mappedBy = "cart")
-    private Set<CartItem> cartCartItems = new HashSet<>();
 
 }

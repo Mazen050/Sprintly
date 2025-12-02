@@ -2,18 +2,18 @@ package com.sprintly.backend.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +21,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Product {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Categories {
 
     @Id
     @Column(nullable = false, updatable = false)
@@ -37,17 +38,11 @@ public class Product {
     )
     private Long id;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, length = 100)
     private String name;
 
     @Column(columnDefinition = "text")
     private String description;
-
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
-
-    @Column
-    private Integer stockQuantity;
 
     @Column
     private OffsetDateTime createdAt;
@@ -55,23 +50,8 @@ public class Product {
     @Column
     private OffsetDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    @OneToMany(mappedBy = "product")
-    private Set<ProductImage> productProductImages = new HashSet<>();
-
-    @OneToMany(mappedBy = "product")
-    private Set<ProductVariant> productProductVariants = new HashSet<>();
-
-    @OneToMany(mappedBy = "product")
-    private Set<OrderItem> productOrderItems = new HashSet<>();
-
-    @OneToMany(mappedBy = "product")
-    private Set<Review> productReviews = new HashSet<>();
-
-    @OneToMany(mappedBy = "product")
-    private Set<CartItem> productCartItems = new HashSet<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "category")
+    private Set<Products> categoryProducts = new HashSet<>();
 
 }

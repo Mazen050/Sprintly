@@ -54,15 +54,15 @@ public class Users {
     private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "user")
-    private Set<Address> userAddresses = new HashSet<>();
+    private Set<Addresses> userAddresses = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<Order> userOrders = new HashSet<>();
+    private Set<Orders> userOrders = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<Review> userReviews = new HashSet<>();
+    private Set<Reviews> userReviews = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<Cart> userCarts = new HashSet<>();
+    private Set<Carts> userCarts = new HashSet<>();
 
 }

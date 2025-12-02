@@ -1,5 +1,7 @@
 package com.sprintly.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,7 +18,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class ProductVariant {
+public class ProductVariants {
 
     @Id
     @Column(nullable = false, updatable = false)
@@ -40,6 +42,7 @@ public class ProductVariant {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Product product;
+    @JsonIgnore
+    private Products product;
 
 }

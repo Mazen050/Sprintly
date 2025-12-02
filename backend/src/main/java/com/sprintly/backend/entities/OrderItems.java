@@ -9,6 +9,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
+import java.math.BigDecimal;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +20,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class ProductImage {
+public class OrderItems {
 
     @Id
     @Column(nullable = false, updatable = false)
@@ -32,14 +36,20 @@ public class ProductImage {
     )
     private Long id;
 
-    @Column(nullable = false, columnDefinition = "text")
-    private String imageUrl;
+    @Column(nullable = false)
+    private Integer quantity;
 
-    @Column
-    private Boolean isPrimary;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal priceAtOrder;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    @JsonIgnore
+    private Orders order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Product product;
+    @JsonIgnore
+    private Products product;
 
 }

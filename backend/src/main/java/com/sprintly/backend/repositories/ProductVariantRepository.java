@@ -2,8 +2,8 @@ package com.sprintly.backend.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sprintly.backend.entities.ProductVariant;
+import com.sprintly.backend.entities.ProductVariants;
 
 
-public interface ProductVariantRepository extends JpaRepository<ProductVariant, Long> {
+public interface ProductVariantRepository extends JpaRepository<ProductVariants, Long> {
 }
