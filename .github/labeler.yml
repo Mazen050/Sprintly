@@ -1,17 +1,22 @@
 frontend:
-  - "FrontEnd/**"
+  - any:
+      - "FrontEnd/**"
 
 backend:
-  - "backend/**"
+  - any:
+      - "backend/**"
 
 database:
-  - "database/**"
+  - any:
+      - "database/**"
 
 documentation:
-  - "*.md"
-  - "docs/**"
+  - any:
+      - "*.md"
+      - "docs/**"
 
 config:
-  - ".github/**"
-  - "**/application*.yml"
-  - "**/application*.properties"
+  - any:
+      - ".github/**"
+      - "**/application*.yml"
+      - "**/application*.properties"
