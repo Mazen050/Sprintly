@@ -1,0 +1,77 @@
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-tabs">
+            <button class="tab-btn" [class.active]="isLogin" (click)="switchMode('login')">Login</button>
+            <button class="tab-btn" [class.active]="!isLogin" (click)="switchMode('signup')">Sign Up</button>
+        </div>
+
+        <h2 class="auth-title">
+            {{ isLogin ? 'Welcome back 👋' : 'Create your account' }}
+        </h2>
+        <p class="auth-subtitle">
+            {{ isLogin ? 'Log in to continue shopping with Sprintly.' :
+            'Sign up to start your Sprintly shopping experience.' }}
+        </p>
+
+        <form class="auth-form" #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+
+            <div *ngIf="!isLogin" class="form-row">
+                <label>Full Name</label>
+                <input type="text" name="fullName" [(ngModel)]="formData.fullName" required
+                    placeholder="Ossama Adel Ibrahim" #nameCtrl="ngModel"
+                    [class.error-border]="nameCtrl.invalid && (nameCtrl.touched || authForm.submitted)">
+
+                <small class="error-msg" *ngIf="nameCtrl.invalid && (nameCtrl.touched || authForm.submitted)">
+                    Full Name is required.
+                </small>
+            </div>
+
+            <div class="form-row">
+                <label>Email</label>
+                <input type="email" name="email" [(ngModel)]="formData.email" required email
+                    placeholder="name@example.com" #emailCtrl="ngModel"
+                    [class.error-border]="emailCtrl.invalid && (emailCtrl.touched || authForm.submitted)">
+
+                <small class="error-msg" *ngIf="emailCtrl.invalid && (emailCtrl.touched || authForm.submitted)">
+                    <span *ngIf="emailCtrl.errors?.['required']">Email is required.</span>
+                    <span *ngIf="emailCtrl.errors?.['email']">Please enter a valid email.</span>
+                </small>
+            </div>
+
+            <div class="form-row">
+                <label>Password</label>
+                <input type="password" name="password" [(ngModel)]="formData.password" required minlength="6"
+                    placeholder="Enter your password" #passCtrl="ngModel"
+                    [class.error-border]="passCtrl.invalid && (passCtrl.touched || authForm.submitted)">
+
+                <small class="error-msg" *ngIf="passCtrl.invalid && (passCtrl.touched || authForm.submitted)">
+                    <span *ngIf="passCtrl.errors?.['required']">Password is required.</span>
+                    <span *ngIf="passCtrl.errors?.['minlength']">Password must be at least 6 characters.</span>
+                </small>
+            </div>
+
+            <div *ngIf="isLogin" class="form-extra">
+                <label class="remember">
+                    <input type="checkbox">
+                    <span>Remember me</span>
+                </label>
+                <a href="#" class="link">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="primary-btn">
+                {{ isLogin ? 'Login' : 'Create Account' }}
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <span *ngIf="isLogin">
+                New to Sprintly?
+                <button class="link-btn" (click)="switchMode('signup')">Sign Up</button>
+            </span>
+            <span *ngIf="!isLogin">
+                Already have an account?
+                <button class="link-btn" (click)="switchMode('login')">Login</button>
+            </span>
+        </div>
+    </div>
+</div>
