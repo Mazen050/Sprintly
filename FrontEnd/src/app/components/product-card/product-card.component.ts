@@ -1,7 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
+import { RouterModule } from '@angular/router';
 
+
+export interface Review {
+  id: number;
+  username: string;
+  rating: number;
+  date: string;
+  title: string;
+  comment: string;
+  verified: boolean;
+}
 export interface Product {
   id: number;
   image: string;
@@ -14,12 +25,14 @@ export interface Product {
   isNew?: boolean;
   isSale?: boolean;
   isWishlisted?: boolean;
+  reviewList?: Review[];
+  starBreakdown?: { 5: number, 4: number, 3: number, 2: number, 1: number };
 }
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css'
 })
@@ -28,7 +41,7 @@ export class ProductCardComponent {
   @Input({ required: true }) product!: Product;
   quantity: number = 0;
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService) { }
   addToCart(event: Event) {
     event.stopPropagation();
     this.quantity = 1;

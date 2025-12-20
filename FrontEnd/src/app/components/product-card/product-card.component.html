@@ -1,5 +1,5 @@
-<div class="product-card">
-
+<div class="product-card" [routerLink]="['/product', product.id]">
+  
   <div class="card-image-container">
     <img [src]="product.image" [alt]="product.title" class="product-image">
 
@@ -9,16 +9,12 @@
     </div>
 
     <div class="hover-actions">
-      <button class="action-btn" (click)="toggleWishlist($event)" aria-label="Add to Wishlist">
-
+      <button class="action-btn" (click)="toggleWishlist($event); $event.stopPropagation()" aria-label="Add to Wishlist">
         <svg [class.filled-heart]="product.isWishlisted" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
           stroke-linejoin="round">
-          <path
-            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-          </path>
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
-
       </button>
     </div>
   </div>
@@ -41,7 +37,7 @@
       </span>
     </div>
 
-    <button *ngIf="quantity === 0" class="add-to-cart-btn" (click)="addToCart($event)">
+    <button *ngIf="quantity === 0" class="add-to-cart-btn" (click)="addToCart($event); $event.stopPropagation()">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="9" cy="21" r="1"></circle>
@@ -52,9 +48,9 @@
     </button>
 
     <div *ngIf="quantity > 0" class="qty-control" (click)="$event.stopPropagation()">
-      <button class="qty-btn" (click)="decrement($event)">−</button>
+      <button class="qty-btn" (click)="decrement($event); $event.stopPropagation()">−</button>
       <span class="qty-number">{{ quantity }}</span>
-      <button class="qty-btn" (click)="increment($event)">+</button>
+      <button class="qty-btn" (click)="increment($event); $event.stopPropagation()">+</button>
     </div>
   </div>
 </div>
