@@ -1,9 +1,16 @@
-# E-Commerce Website (Angular + Spring Boot)
+# E-Commerce Website (Angular + Spring Boot) ![Vercel Deploy](https://deploy-badge.vercel.app/vercel/sprintly-front)
 
 ## 📌 Overview
 
 The **E-Commerce Website** is a full‑stack web application built using **Angular** for the frontend and **Spring Boot** for the backend. It provides a complete online shopping experience, including product browsing, authentication, cart management, checkout workflow, and admin functionality.
 
+
+## 🚀 Live Demo
+
+🔗 **Production Deployment:**  
+https://sprintly-front.vercel.app/
+
+Backend: [here](https://peculiar-ginni-mazen212-2562c12b.koyeb.app/)
 
 ---
 
