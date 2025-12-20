@@ -1,0 +1,164 @@
+<div class="details-container" *ngIf="product">
+
+    <div class="product-hero">
+
+        <div class="image-gallery">
+            <img [src]="product.image" [alt]="product.title" class="main-image">
+        </div>
+
+        <div class="product-info">
+            <span class="category-badge">{{ product.category }}</span>
+            <h1 class="product-title">{{ product.title }}</h1>
+
+            <div class="rating-row">
+                <span class="stars">
+                    <span *ngFor="let star of [1,2,3,4,5]" [class.filled]="star <= (product.rating || 0)">★</span>
+                </span>
+                <span class="review-count">{{ product.reviews }} reviews</span>
+            </div>
+
+            <div class="price-row">
+                <span class="current-price">{{ product.price | currency }}</span>
+                <span *ngIf="product.originalPrice" class="old-price">{{ product.originalPrice | currency }}</span>
+            </div>
+
+            <p class="description">
+                Experience premium quality with the {{ product.title }}. Designed for comfort and durability,
+                this item is perfect for your daily needs. (Mock description text).
+            </p>
+
+            <div class="actions">
+                <button class="add-to-cart-btn" (click)="addToCart()">
+                    Add to Cart
+                </button>
+
+                <button class="wishlist-btn" (click)="toggleWishlist()" aria-label="Add to Wishlist">
+                    <svg [class.filled-heart]="product.isWishlisted" xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="meta-info">
+                <p><strong>Availability:</strong> <span class="in-stock">In Stock</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="related-section">
+        <h3>Customers who viewed this item also viewed</h3>
+        <div class="related-grid">
+            <app-product-card *ngFor="let item of relatedProducts" [product]="item">
+            </app-product-card>
+        </div>
+    </div>
+
+    <div class="reviews-container-section" *ngIf="product.reviewList">
+
+        <div class="review-summary">
+            <h3>Customer Reviews</h3>
+
+            <div class="main-rating-block">
+                <span class="big-rating">{{ product.rating }}</span>
+                <div class="stars-and-count">
+                    <span class="stars">
+                        <span *ngFor="let star of [1,2,3,4,5]" [class.filled]="star <= (product.rating || 0)">★</span>
+                    </span>
+                    <span>Based on {{ product.reviews }} global ratings</span>
+                </div>
+            </div>
+
+            <div class="rating-bars">
+
+                <div class="bar-row">
+                    <span>5 star</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-fill" [style.width.%]="product.starBreakdown?.[5] || 0"></div>
+                    </div>
+                    <span>{{ product.starBreakdown?.[5] || 0 }}%</span>
+                </div>
+
+                <div class="bar-row">
+                    <span>4 star</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-fill" [style.width.%]="product.starBreakdown?.[4] || 0"></div>
+                    </div>
+                    <span>{{ product.starBreakdown?.[4] || 0 }}%</span>
+                </div>
+
+                <div class="bar-row">
+                    <span>3 star</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-fill" [style.width.%]="product.starBreakdown?.[3] || 0"></div>
+                    </div>
+                    <span>{{ product.starBreakdown?.[3] || 0 }}%</span>
+                </div>
+
+                <div class="bar-row">
+                    <span>2 star</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-fill" [style.width.%]="product.starBreakdown?.[2] || 0"></div>
+                    </div>
+                    <span>{{ product.starBreakdown?.[2] || 0 }}%</span>
+                </div>
+
+                <div class="bar-row">
+                    <span>1 star</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-fill" [style.width.%]="product.starBreakdown?.[1] || 0"></div>
+                    </div>
+                    <span>{{ product.starBreakdown?.[1] || 0 }}%</span>
+                </div>
+
+            </div>
+
+            <button class="write-review-btn">Write a product review</button>
+        </div>
+
+        <div class="top-reviews-list">
+            <h3>Top reviews from customers</h3>
+
+            <div class="review-card" *ngFor="let review of product.reviewList">
+
+                <div class="reviewer-profile">
+                    <div class="avatar-placeholder">{{ review.username.charAt(0) }}</div>
+                    <span class="username">{{ review.username }}</span>
+                </div>
+
+                <div class="review-header">
+                    <span class="stars review-stars">
+                        <span *ngFor="let star of [1,2,3,4,5]" [class.filled]="star <= review.rating">★</span>
+                    </span>
+                    <strong class="review-title">{{ review.title }}</strong>
+                </div>
+
+                <div class="review-meta">
+                    <span class="review-date">{{ review.date }}</span>
+                    <span class="verified-badge" *ngIf="review.verified">Verified Purchase</span>
+                </div>
+
+                <p class="review-body">{{ review.comment }}</p>
+
+                <div class="review-actions">
+                    <button class="helpful-btn">Helpful</button>
+                    <span>Report</span>
+                </div>
+            </div>
+
+            <div *ngIf="product.reviewList.length === 0" class="no-reviews">
+                <p>No reviews yet. Be the first to review this product!</p>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div *ngIf="!product" class="not-found">
+    <h2>Product not found</h2>
+    <a routerLink="/">Go Back Home</a>
+</div>
