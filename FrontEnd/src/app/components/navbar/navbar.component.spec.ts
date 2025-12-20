@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 })
 export class NavbarComponent {
   menuActive = false;
+cartCount: any;
 
   toggleMenu(): void {
     this.menuActive = !this.menuActive;
