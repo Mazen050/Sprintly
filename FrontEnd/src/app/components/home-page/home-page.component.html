@@ -1,1 +1,7 @@
-<app-navbar></app-navbar>
+<div class="product-grid"
+  style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 40px; background: #f8fafc;">
+
+  <app-product-card *ngFor="let prod of products" [product]="prod">
+  </app-product-card>
+
+</div>
