@@ -11,6 +11,9 @@ import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -54,15 +57,19 @@ public class Users {
     private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<Addresses> userAddresses = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<Orders> userOrders = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<Reviews> userReviews = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<Carts> userCarts = new HashSet<>();
 
 }
