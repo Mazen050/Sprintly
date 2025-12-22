@@ -40,10 +40,24 @@ export class HomePageComponent implements OnInit, OnDestroy {
     return this.heroProducts[this.currentIndex];
   }
 
-  goToSlide(index: number) {
-    this.currentIndex = index;
+  resetTimer() {
     clearInterval(this.intervalId);
     this.startSlideShow();
+  }
+
+  goToSlide(index: number) {
+    this.currentIndex = index;
+    this.resetTimer();
+  }
+
+  nextSlide() {
+    this.currentIndex = (this.currentIndex + 1) % this.heroProducts.length;
+    this.resetTimer();
+  }
+
+  prevSlide() {
+    this.currentIndex = (this.currentIndex - 1 + this.heroProducts.length) % this.heroProducts.length;
+    this.resetTimer();
   }
 
   ngOnDestroy() {
