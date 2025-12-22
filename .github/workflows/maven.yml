@@ -27,6 +27,8 @@ jobs:
     env:
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       DB_PASSwORD: ${{ secrets.DB_PASSwORD }}
+      STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+      STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
 
     steps:
     - uses: actions/checkout@v4

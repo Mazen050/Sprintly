@@ -5,8 +5,14 @@ import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,8 +49,13 @@ public class Orders {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
-    @Column
-    private String status;
+     @Enumerated(EnumType.STRING)
+     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(
+        name = "status",
+        columnDefinition = "order_status"
+    )
+    private OrderStatus status;
 
     @Column
     private OffsetDateTime createdAt;
@@ -60,7 +71,7 @@ public class Orders {
     @JoinColumn(name = "discount_code_id")
     private DiscountCodes discountCode;
 
-    @OneToMany(mappedBy = "order")
-    private Set<OrderItems> orderOrderItems = new HashSet<>();
+    @OneToMany(mappedBy = "order",cascade={CascadeType.PERSIST,CascadeType.REMOVE})
+    private Set<OrderItems> Items = new HashSet<>();
 
 }
