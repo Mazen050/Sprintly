@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router'; 
 import { CartService } from '../../services/cart.service'; 
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,10 +13,14 @@ import { CartService } from '../../services/cart.service';
 })
 export class NavbarComponent {
   menuActive = false;
+  cartCount: number = 0;
+  isDropdownOpen = false; 
 
-  cartCount:number = 0;
-
-  constructor(private cartService: CartService) {
+  constructor(
+    private cartService: CartService,
+    public authService: AuthService,
+    private router: Router
+  ) {
     this.cartService.currentCount.subscribe(count => {
       this.cartCount = count;
     });
@@ -23,5 +28,14 @@ export class NavbarComponent {
 
   toggleMenu() {
     this.menuActive = !this.menuActive;
+  }
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+  onLogout() {
+    this.authService.logout();
+    this.isDropdownOpen = false;
+    this.menuActive = false;
+    this.router.navigate(['/login']);
   }
 }

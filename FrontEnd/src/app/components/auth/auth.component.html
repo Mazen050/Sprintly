@@ -14,7 +14,10 @@
         </p>
 
         <form class="auth-form" #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
-
+            <div *ngIf="errorMessage"
+                style="color: red; background-color: #ffe6e6; padding: 10px; margin-bottom: 10px; border-radius: 5px; text-align: center;">
+                {{ errorMessage }}
+            </div>
             <div *ngIf="!isLogin" class="form-row">
                 <label>Full Name</label>
                 <input type="text" name="fullName" [(ngModel)]="formData.fullName" required
