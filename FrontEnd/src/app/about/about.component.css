@@ -1,0 +1,29 @@
+.about-container {
+  max-width: 900px;
+  margin: 90px auto;
+  padding: -150px 20px;
+  line-height: 2;
+}
+
+.about-container h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #0052ff;
+}
+
+.about-container h2 {
+  margin-top: 30px;
+  color: #0052ff;
+}
+
+.about-container ul {
+  padding-left: 20px;
+}
+
+.about-container li {
+  margin-bottom: 8px;
+}
+
+.intro {
+  font-size: 18px;
+}
