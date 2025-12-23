@@ -91,5 +91,5 @@ public class Products {
         @Column(nullable = false)
         private int reviewCount;
 
-
+    
 }

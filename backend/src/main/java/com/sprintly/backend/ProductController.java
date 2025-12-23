@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sprintly.backend.dtos.FullProductDto;
 import com.sprintly.backend.dtos.ProductCreateDto;
 import com.sprintly.backend.dtos.ProductDto;
 import com.sprintly.backend.entities.Products;
+import com.sprintly.backend.mappers.FullProductMapper;
 import com.sprintly.backend.mappers.ProductMapper;
 import com.sprintly.backend.repositories.CategoryRepository;
 import com.sprintly.backend.repositories.ProductRepository;
@@ -38,6 +40,7 @@ public class ProductController {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
+    private final FullProductMapper productMapperFull;
 
 
 
@@ -82,9 +85,10 @@ public class ProductController {
     // ===== GET BY ID =====
     @Transactional
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
+    public ResponseEntity<FullProductDto> getProductById(@PathVariable Long id) {
+            System.out.println("🔥 CONTROLLER HIT");
         return productRepository.findById(id)
-                .map(productMapper::toDto)
+                .map(productMapperFull::toDto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

@@ -72,6 +72,14 @@ public interface ProductRepository extends JpaRepository<Products, Long> {
 List<Object[]> findAllWithIsSale();
 
 
+@Query("""
+SELECT DISTINCT p FROM Products p
+LEFT JOIN FETCH p.productReviews
+LEFT JOIN FETCH p.category
+LEFT JOIN FETCH p.productProductImages
+WHERE p.id = :id
+""")
+Products findDetails(@Param("id") Long id);
 
 
 }
