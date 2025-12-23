@@ -57,7 +57,8 @@ public class ProductController {
                         String name = (String) row[3];
                         String categoryName = (String) row[4];
                         BigDecimal price = (BigDecimal) row[5];
-                        Double rating = (Double) row[7];
+                        BigDecimal ratingBd = (BigDecimal) row[7];
+                        Double rating = ratingBd != null ? ratingBd.doubleValue() : null;
                         Long reviews = (Long) row[8];
                         Boolean isNew = (Boolean) row[9];
                         Boolean isSale = (Boolean) row[10];
