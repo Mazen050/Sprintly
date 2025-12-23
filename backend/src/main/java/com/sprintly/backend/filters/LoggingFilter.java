@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 //*
 // Logging Filter
 // Used for logging every incomming request */
-@Component
+// @Component
 public class LoggingFilter extends OncePerRequestFilter {
 
     @Override

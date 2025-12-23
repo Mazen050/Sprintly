@@ -10,6 +10,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
@@ -73,5 +76,20 @@ public class Products {
 
     @OneToMany(mappedBy = "product")
     private Set<CartItems> productCartItems = new HashSet<>();
+
+        @Column(nullable = false)
+        private boolean isNew;
+
+        @Column(nullable = false)
+        private boolean isSale;
+
+        @Column
+        @Min(1)
+        @Max(5)
+        private Integer rating;
+
+        @Column(nullable = false)
+        private int reviewCount;
+
 
 }
