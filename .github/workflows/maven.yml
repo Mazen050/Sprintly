@@ -24,6 +24,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      DB_PASSwORD: ${{ secrets.DB_PASSwORD }}
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21

@@ -1,7 +1,58 @@
-<div class="product-grid"
-  style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 40px; background: #f8fafc;">
+<div class="home-container">
 
-  <app-product-card *ngFor="let prod of products" [product]="prod">
-  </app-product-card>
+  <div class="hero-banner" *ngIf="heroProducts.length > 0" [routerLink]="['/product', currentHero.id]">
+
+    <div class="nav-arrows" (click)="$event.stopPropagation()">
+      <button class="arrow-btn prev" (click)="prevSlide()" aria-label="Previous Slide">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <button class="arrow-btn next" (click)="nextSlide()" aria-label="Next Slide">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <div class="hero-content">
+      <span class="hero-tag">Special Offer</span>
+
+      <h1 class="fade-in">{{ currentHero.title }}</h1>
+
+      <p class="description fade-in">
+        Experience premium quality and performance.
+        Get yours today while stocks last.
+      </p>
+
+      <div class="price-block fade-in">
+        <span class="label">Now Only</span>
+        <span class="big-price">{{ currentHero.price | currency }}</span>
+      </div>
+
+      <button class="hero-btn">Shop Now</button>
+    </div>
+
+    <div class="hero-image-box">
+      <img [src]="currentHero.image" [alt]="currentHero.title" class="slide-image">
+    </div>
+
+    <div class="dots" (click)="$event.stopPropagation()">
+      <span *ngFor="let p of heroProducts; let i = index" class="dot" [class.active]="i === currentIndex"
+        (click)="goToSlide(i)">
+      </span>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">Latest Products</h2>
+
+  <div class="products-grid">
+    <app-product-card *ngFor="let product of products" [product]="product">
+    </app-product-card>
+  </div>
 
 </div>
