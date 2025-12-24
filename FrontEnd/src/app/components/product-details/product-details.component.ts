@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductService } from '../../services/product-details.service';
 import { CartService } from '../../services/cart.service';
-import { Product, ProductCardComponent } from '../product-card/product-card.component';
+import { ProductCardComponent } from '../product-card/product-card.component';
+import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent], 
+  imports: [CommonModule, ProductCardComponent, RouterModule],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
 })
@@ -23,12 +24,19 @@ export class ProductDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
-      this.product = this.productService.getProductById(id);
-      this.relatedProducts = this.productService.getProducts().filter(p => p.id !== id);
-      window.scrollTo(0, 0);
+      this.productService.getProductById(id).subscribe({
+        next: (data) => {
+          this.product = data;
+          window.scrollTo(0, 0);
+        }
+      });
+      this.productService.getProducts().subscribe({
+        next: (allProducts) => {
+          this.relatedProducts = allProducts.filter(p => p.id !== id);
+        }
+      });
     });
   }
 
