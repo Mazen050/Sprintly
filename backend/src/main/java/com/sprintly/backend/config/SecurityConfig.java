@@ -41,7 +41,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST,"/users/**").permitAll()
                 .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
                 .requestMatchers(HttpMethod.POST,"/checkout/webhook").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
+                //
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
