@@ -19,21 +19,110 @@ export class ProductService {
     }
     return headers;
   }
-
   getProducts(): Observable<Product[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/products`, { headers: this.getHeaders() }).pipe(
-      map(backendData => backendData.map(item => this.mapBackendToFrontend(item)))
+    return this.http.get(`${this.baseUrl}/products`, {
+      headers: this.getHeaders(),
+      responseType: 'text'
+    }).pipe(
+      map(responseText => {
+        let backendData: any;
+
+        try {
+          backendData = JSON.parse(responseText);
+        } catch (e) {
+          console.warn("Normal Parse Failed. Attempting to extract first JSON array...");
+          const cleanText = this.extractFirstJson(responseText);
+
+          if (cleanText) {
+            try {
+              backendData = JSON.parse(cleanText);
+              console.log("JSON Extracted & Fixed Successfully!");
+            } catch (e2) {
+              console.error("Extraction Failed:", e2);
+              return [];
+            }
+          } else {
+            return [];
+          }
+        }
+        let itemsArray = [];
+        if (Array.isArray(backendData)) {
+          itemsArray = backendData;
+        } else if (backendData && Array.isArray(backendData.data)) {
+          itemsArray = backendData.data;
+        } else if (backendData && Array.isArray(backendData.products)) {
+          itemsArray = backendData.products;
+        }
+
+        return itemsArray.map((item: any) => this.mapBackendToFrontend(item));
+      })
     );
+  }
+  private extractFirstJson(text: string): string | null {
+    let bracketCount = 0;
+    let inString = false;
+    let escape = false;
+    let startFound = false;
+    let startIndex = -1;
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+
+      if (!startFound) {
+        if (char === '[' || char === '{') {
+          startFound = true;
+          startIndex = i;
+          bracketCount = 1;
+        }
+        continue;
+      }
+      if (char === '"' && !escape) {
+        inString = !inString;
+      }
+      if (char === '\\' && !escape) {
+        escape = true;
+      } else {
+        escape = false;
+      }
+
+      if (!inString) {
+        if (char === '[' || char === '{') {
+          bracketCount++;
+        } else if (char === ']' || char === '}') {
+          bracketCount--;
+          if (bracketCount === 0) {
+            return text.substring(startIndex, i + 1);
+          }
+        }
+      }
+    }
+    return null;
   }
 
   getProductById(id: number): Observable<Product> {
-    return this.http.get<any>(`${this.baseUrl}/products/${id}`, { headers: this.getHeaders() }).pipe(
-      map(item => this.mapBackendToFrontend(item))
+    return this.http.get(`${this.baseUrl}/products/${id}`, {
+      headers: this.getHeaders(),
+      responseType: 'text'
+    }).pipe(
+      map(responseText => {
+        let item: any;
+        try {
+          item = JSON.parse(responseText);
+        } catch (e) {
+          const clean = this.extractFirstJson(responseText);
+          if (clean) item = JSON.parse(clean);
+        }
+        return this.mapBackendToFrontend(item);
+      })
     );
   }
+
   private mapBackendToFrontend(item: any): Product {
+    if (!item) return {} as Product;
+
     const rating = item.rating || 0;
     const reviewCount = item.reviews || 0;
+
     const backendReviews = item.reviewList || [];
     let finalReviews: any[] = [];
 
@@ -83,6 +172,7 @@ export class ProductService {
       starBreakdown: starBreakdown
     };
   }
+
   private generateMockReviews(count: number, avgRating: number): any[] {
     const mocks = [];
     for (let i = 0; i < count; i++) {
