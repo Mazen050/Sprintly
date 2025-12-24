@@ -9,6 +9,7 @@
     width: 100%;
     box-sizing: border-box;
     position: relative;
+    overflow: visible;
 }
 
 .logo {
@@ -42,6 +43,9 @@
     margin-left: auto;
     margin-right: auto;
     transform: translateX(20px);
+    position: relative;
+    z-index: 3000;
+
 }
 
 .nav-links li {
@@ -398,4 +402,33 @@
 .dropdown-content a.logout-link:hover {
     background-color: #fff5f5;
     color: #dc3545;
+}
+.products-item {
+  position: relative;
+}
+
+.products-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  min-width: 180px;
+  border-radius: 6px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  z-index: 2000;
+}
+
+.products-dropdown li a {
+  display: block;
+  padding: 10px 16px;
+  color: #333;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.products-dropdown li a:hover {
+  background-color: #f2f4f8;
 }

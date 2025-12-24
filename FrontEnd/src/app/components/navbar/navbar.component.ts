@@ -15,6 +15,9 @@ export class NavbarComponent {
   menuActive = false;
   cartCount: number = 0;
   isDropdownOpen = false; 
+  productsOpen = false;
+
+
 
   constructor(
     private cartService: CartService,
