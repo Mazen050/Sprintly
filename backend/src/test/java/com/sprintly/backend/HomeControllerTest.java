@@ -14,8 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.sprintly.backend.services.JwtService;
 
-@WebMvcTest(HomeController.class)
-@AutoConfigureMockMvc(addFilters = false)
+// @WebMvcTest(HomeController.class)
+// @AutoConfigureMockMvc(addFilters = false)
 public class HomeControllerTest {
 
     @Autowired
