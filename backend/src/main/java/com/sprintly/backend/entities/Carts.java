@@ -1,5 +1,6 @@
 package com.sprintly.backend.entities;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,7 +45,16 @@ public class Carts {
     @JoinColumn(name = "user_id")
     private Users user;
 
-    @OneToMany(mappedBy = "cart")
+        @Column(nullable = false, precision = 10, scale = 2)
+        private BigDecimal totalPrice = BigDecimal.ZERO;
+
+
+    @OneToMany(mappedBy = "cart",cascade = jakarta.persistence.CascadeType.MERGE)
     private Set<CartItems> items = new HashSet<>();
 
+    public BigDecimal getTotalPrice() {
+        return items.stream()
+                .map(CartItems::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }

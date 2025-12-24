@@ -9,6 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
+
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,5 +53,9 @@ public class CartItems {
     @JoinColumn(name = "product_id")
     @JsonIgnore
     private Products product;
+
+    public BigDecimal getTotalPrice() {
+        return product.getPrice().multiply(BigDecimal.valueOf(quantity));
+    }
 
 }
