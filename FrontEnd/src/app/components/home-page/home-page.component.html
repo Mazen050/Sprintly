@@ -1,6 +1,6 @@
 <div class="home-container">
 
-  <div class="hero-banner" *ngIf="heroProducts.length > 0" [routerLink]="['/product', currentHero.id]">
+  <div class="hero-banner" *ngIf="heroProducts.length > 0 && currentHero" [routerLink]="['/product', currentHero.id]">
 
     <div class="nav-arrows" (click)="$event.stopPropagation()">
       <button class="arrow-btn prev" (click)="prevSlide()" aria-label="Previous Slide">

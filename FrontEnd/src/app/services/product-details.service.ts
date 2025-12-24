@@ -1,107 +1,191 @@
 import { Injectable } from '@angular/core';
-import { Product } from '../components/product-card/product-card.component';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { Product } from '../models/product';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private products: Product[] = [
-    {
-      id: 1,
-      image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      title: 'Modern Laptop Backpack',
-      category: 'Accessories',
-      price: 109.95,
-      rating: 4.8,
-      reviews: 120,
-      isNew: true,
-      starBreakdown: { 5: 75, 4: 15, 3: 6, 2: 2, 1: 2 },
-      reviewList: [
-        {
-          id: 101,
-          username: "Sarah Jenkins",
-          rating: 5,
-          date: "Reviewed on Oct 15, 2023",
-          title: "Perfect for commute and travel!",
-          comment: "I absolutely love this backpack. The laptop compartment is well padded and there are so many pockets for organization. It looks professional enough for work but casual enough for weekends.",
-          verified: true
-        },
-        {
-          id: 102,
-          username: "Mike D.",
-          rating: 4,
-          date: "Reviewed on Sept 2, 2023",
-          title: "Great quality, slightly smaller than expected",
-          comment: "The materials feel premium and zippers are smooth. It fits my 15-inch laptop snugly. I just wish the main compartment had a little more depth for bulky items like a lunch box.",
-          verified: true
-        },
-        {
-          id: 103,
-          username: "Alex T.",
-          rating: 5,
-          date: "Reviewed on Aug 20, 2023",
-          title: "Best investment this year",
-          comment: "Comfortable straps, sleek design, and very durable water-resistant material. Highly recommend.",
-          verified: true
-        }
-      ]
-    },
-    {
-      id: 2,
-      image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      title: 'Premium Slim Fit T-Shirt',
-      category: 'Clothing',
-      price: 22.30,
-      originalPrice: 35.00,
-      rating: 4,
-      reviews: 259,
-      isSale: true,
-      starBreakdown: { 5: 50, 4: 30, 3: 10, 2: 5, 1: 5 },
-      reviewList: [
-        {
-          id: 201,
-          username: "John Doe",
-          rating: 4,
-          date: "Reviewed on July 10, 2023",
-          title: "Nice fit",
-          comment: "Fits well and feels soft. Shrunk a tiny bit after the first wash but still good and the model is black also.",
-          verified: true
-        }
-      ]
-    },
-    {
-      id: 3,
-      image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      title: 'Nike Air Sneakers',
-      category: 'Footwear',
-      price: 120.00,
-      rating: 5,
-      reviews: 410,
-      starBreakdown: { 5: 90, 4: 8, 3: 1, 2: 0, 1: 1 },
-      reviewList: []
-    },
-    {
-      id: 4,
-      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      title: 'Wireless Noise Cancelling Headphones',
-      category: 'Electronics',
-      price: 250.00,
-      originalPrice: 300.00,
-      rating: 5,
-      reviews: 850,
-      isSale: true,
-      starBreakdown: { 5: 85, 4: 10, 3: 3, 2: 1, 1: 1 },
-      reviewList: []
+  private baseUrl = 'https://peculiar-ginni-mazen212-2562c12b.koyeb.app';
+
+  constructor(private http: HttpClient) { }
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('auth_token');
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
     }
-  ];
+    return headers;
+  }
+  getProducts(): Observable<Product[]> {
+    return this.http.get(`${this.baseUrl}/products`, {
+      headers: this.getHeaders(),
+      responseType: 'text'
+    }).pipe(
+      map(responseText => {
+        let backendData: any;
 
-  constructor() { }
+        try {
+          backendData = JSON.parse(responseText);
+        } catch (e) {
+          console.warn("Normal Parse Failed. Attempting to extract first JSON array...");
+          const cleanText = this.extractFirstJson(responseText);
 
-  getProducts() {
-    return this.products;
+          if (cleanText) {
+            try {
+              backendData = JSON.parse(cleanText);
+              console.log("JSON Extracted & Fixed Successfully!");
+            } catch (e2) {
+              console.error("Extraction Failed:", e2);
+              return [];
+            }
+          } else {
+            return [];
+          }
+        }
+        let itemsArray = [];
+        if (Array.isArray(backendData)) {
+          itemsArray = backendData;
+        } else if (backendData && Array.isArray(backendData.data)) {
+          itemsArray = backendData.data;
+        } else if (backendData && Array.isArray(backendData.products)) {
+          itemsArray = backendData.products;
+        }
+
+        return itemsArray.map((item: any) => this.mapBackendToFrontend(item));
+      })
+    );
+  }
+  private extractFirstJson(text: string): string | null {
+    let bracketCount = 0;
+    let inString = false;
+    let escape = false;
+    let startFound = false;
+    let startIndex = -1;
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+
+      if (!startFound) {
+        if (char === '[' || char === '{') {
+          startFound = true;
+          startIndex = i;
+          bracketCount = 1;
+        }
+        continue;
+      }
+      if (char === '"' && !escape) {
+        inString = !inString;
+      }
+      if (char === '\\' && !escape) {
+        escape = true;
+      } else {
+        escape = false;
+      }
+
+      if (!inString) {
+        if (char === '[' || char === '{') {
+          bracketCount++;
+        } else if (char === ']' || char === '}') {
+          bracketCount--;
+          if (bracketCount === 0) {
+            return text.substring(startIndex, i + 1);
+          }
+        }
+      }
+    }
+    return null;
   }
 
-  getProductById(id: number) {
-    return this.products.find(p => p.id === id);
+  getProductById(id: number): Observable<Product> {
+    return this.http.get(`${this.baseUrl}/products/${id}`, {
+      headers: this.getHeaders(),
+      responseType: 'text'
+    }).pipe(
+      map(responseText => {
+        let item: any;
+        try {
+          item = JSON.parse(responseText);
+        } catch (e) {
+          const clean = this.extractFirstJson(responseText);
+          if (clean) item = JSON.parse(clean);
+        }
+        return this.mapBackendToFrontend(item);
+      })
+    );
+  }
+
+  private mapBackendToFrontend(item: any): Product {
+    if (!item) return {} as Product;
+
+    const rating = item.rating || 0;
+    const reviewCount = item.reviews || 0;
+
+    const backendReviews = item.reviewList || [];
+    let finalReviews: any[] = [];
+
+    if (backendReviews.length > 0) {
+      finalReviews = backendReviews.map((r: any, index: number) => ({
+        id: index,
+        username: "Verified Customer",
+        rating: r.rating,
+        date: new Date(r.createdAt).toLocaleDateString(),
+        title: "Product Review",
+        comment: r.comment,
+        verified: true
+      }));
+    } else if (reviewCount > 0) {
+      finalReviews = this.generateMockReviews(reviewCount, rating);
+    }
+
+    const starBreakdown = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+    if (finalReviews.length > 0) {
+      finalReviews.forEach((r: any) => {
+        const rRating = Math.round(r.rating);
+        if (rRating >= 1 && rRating <= 5) {
+          // @ts-ignore
+          starBreakdown[rRating]++;
+        }
+      });
+      for (let star in starBreakdown) {
+        // @ts-ignore
+        starBreakdown[star] = (starBreakdown[star] / finalReviews.length) * 100;
+      }
+    }
+
+    return {
+      id: item.id,
+      image: item.image || 'https://via.placeholder.com/300',
+      title: item.title,
+      category: item.category || 'General',
+      price: item.price,
+      originalPrice: item.originalPrice,
+      rating: rating,
+      reviews: reviewCount,
+      isNew: item.isNew,
+      isSale: item.isSale,
+      isWishlisted: false,
+      description: item.description,
+      reviewList: finalReviews,
+      starBreakdown: starBreakdown
+    };
+  }
+
+  private generateMockReviews(count: number, avgRating: number): any[] {
+    const mocks = [];
+    for (let i = 0; i < count; i++) {
+      mocks.push({
+        id: i,
+        username: `Customer ${i + 1}`,
+        rating: avgRating,
+        date: new Date().toLocaleDateString(),
+        title: "Great Product!",
+        comment: "This product met my expectations.",
+        verified: true
+      });
+    }
+    return mocks;
   }
 }
