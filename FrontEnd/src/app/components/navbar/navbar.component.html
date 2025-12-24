@@ -5,10 +5,40 @@
 
   <ul class="nav-links">
     <li><a routerLink="/">Home</a></li>
-    <li><a href="#">Products</a></li>
+    <li class="products-item"
+    (mouseenter)="productsOpen = true"
+    (mouseleave)="productsOpen = false">
+
+  <a routerLink="/products">Products</a>
+
+  <ul class="products-dropdown" *ngIf="productsOpen">
+    <li>
+      <a routerLink="/products" [queryParams]="{ category: 'electronics' }">
+        Electronics
+      </a>
+    </li>
+    <li>
+      <a routerLink="/products" [queryParams]="{ category: 'clothing' }">
+        Clothing
+      </a>
+    </li>
+    <li>
+      <a routerLink="/products" [queryParams]="{ category: 'sports' }">
+        Sports
+      </a>
+    </li>
+    <li>
+      <a routerLink="/products" [queryParams]="{ category: 'accessories' }">
+        Accessories
+      </a>
+    </li>
+  </ul>
+
+</li>
     <li><a routerLink="about">About</a></li>
     <li><a routerLink="Contact">Contact</a></li>
   </ul>
+  
 
   <div class="nav-actions-group">
     <a href="#" class="nav-cart" aria-label="View shopping cart">
